@@ -1,0 +1,553 @@
+/* Шрифты */
+
+@font-face {
+font-family: "FuturaBookC"; 
+src: url("https://ltva1.github.io/Fonts/Futura/FuturaBookC.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}
+
+/*@font-face {
+font-family: "FuturaBookC-Italic"; 
+src: url("https://ltva1.github.io/Fonts/Futura/FuturaBookC-Italic.ttf") format("truetype"); 
+font-style: italic; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}
+
+*/@font-face {
+font-family: "FuturaDemiC"; 
+src: url("https://ltva1.github.io/Fonts/Futura/FuturaDemiC.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000;
+}/*
+
+@font-face {
+font-family: "FuturaDemiC-Italic"; 
+src: url("https://ltva1.github.io/Fonts/Futura/FuturaDemiC-Italic.ttf") format("truetype"); 
+font-style: italic; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}
+
+@font-face {
+font-family: "FuturaLightC"; 
+src: url("https://ltva1.github.io/Fonts/Futura/FuturaLightC.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}
+
+@font-face {
+font-family: "FuturaLightC-Italic"; 
+src: url("https://ltva1.github.io/Fonts/Futura/FuturaDemiC-Italic.ttf") format("truetype"); 
+font-style: italic; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}
+
+*/@font-face {
+font-family: "FuturaMediumC"; 
+src: url("https://ltva1.github.io/Fonts/Futura/FuturaMediumC.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}/*
+
+@font-face {
+font-family: "FuturaMediumC-Italic"; 
+src: url("https://ltva1.github.io/Fonts/Futura/FuturaDemiC-Italic.ttf") format("truetype"); 
+font-style: italic; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}*/
+
+/* ----------------------------------------------------------- */
+
+@font-face {
+font-family: "TrebuchetMS"; 
+src: url("https://ltva1.github.io/Fonts/TrebuchetMS/TrebuchetMS.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}
+
+/*@font-face {
+font-family: "TrebuchetMS-Bold"; 
+src: url("https://ltva1.github.io/Fonts/TrebuchetMS/TrebuchetMS-Bold.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}
+
+@font-face {
+font-family: "TrebuchetMS-Italic"; 
+src: url("https://ltva1.github.io/Fonts/TrebuchetMS/TrebuchetMS-Italic.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}
+
+@font-face {
+font-family: "TrebuchetMS-BoldItalic"; 
+src: url("https://ltva1.github.io/Fonts/TrebuchetMS/TrebuchetMS-BoldItalic.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}*/
+
+/* ----------------------------------------------------------- */
+
+@font-face {
+font-family: "Verdana"; 
+src: url("https://ltva1.github.io/Fonts/Verdana/Verdana.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000;
+}
+
+/*@font-face {
+font-family: "Verdana-Bold"; 
+src: url("https://ltva1.github.io/Fonts/Verdana/Verdana-Bold.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000;
+}
+
+@font-face {
+font-family: "Verdana-Italic"; 
+src: url("https://ltva1.github.io/Fonts/Verdana/Verdana-Italic.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}
+
+@font-face {
+font-family: "Verdana-BoldItalic"; 
+src: url("https://ltva1.github.io/Fonts/Verdana/Verdana-BoldItalic.ttf") format("truetype"); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000; 
+}*/
+
+/* ----------------------------------------------------------- */
+
+@font-face {
+font-family: "Brush Font №1"; 
+src: url('https://ltva1.github.io/Fonts/BrushFontOne/Brush%20Font%20%E2%84%961.ttf') format('truetype'); 
+font-style: normal; 
+font-weight: normal;
+font-display: swap;
+unicode-range: U+0000-A000;
+}
+
+/* Стили заголовков */
+
+h1 { /* Заголовок страницы */
+	font-size: 300%;
+	font-family: "Verdana";
+}
+
+h2 {
+	font-size: 200%;
+	font-family: "Trebuchet MS";
+	font-weight: normal;
+	margin-block-start: 0.5em;
+	margin-block-end: 0.5em;
+}
+/* Остальное */
+
+/* Для всего */
+body {
+	font-size: 10pt;
+	font-family: "Verdana";
+	font-weight: normal;
+	margin: 0;
+    padding: 0;
+}
+
+.content a {
+	color: #bb2020;
+	text-decoration: none;
+}
+
+
+.content a:hover {
+	color: #dd4040;
+	text-decoration: underline;
+}
+
+.content a:visited {
+	color: #dd6060;
+	text-decoration: none;
+}
+
+/* Горизонтальная черта обычная */
+
+hr {
+	margin: 10px;
+	padding: 0px;
+	height: 1px;
+	border: none;
+	background: linear-gradient(90deg, #ffffff, #dd0000, #ffffff);
+}
+
+/* Горизонтальная черта для левого меню */
+
+.hr-left-menu {
+	margin: 10px;
+	padding: 0px;
+	height: 1px;
+	border: none;
+	background: linear-gradient(90deg, #999999, #999999);
+}
+
+/* Верхний баннер */
+
+.header {
+	border: none;
+	background: 
+		radial-gradient(circle at 13em 50%, #dd5500ff 0em, #dd5500ff 0.3em, #dddd00ff 1.5em, #dddd00ff 1.1em, #dd55009f 3em, #00000000 4em),
+		linear-gradient(0deg, rgba(68,68,68,1), rgba(44,44,44,0.5)),
+		repeating-linear-gradient(-60deg, #bb8800 0%, #b02020 1%, #b02020 1%, #bb8800 0%, #b02020 12%);
+	height: 150px;
+	width: 100%;
+	margin-top: -0.5%;
+	position: relative;
+	text-shadow: -2px -2px 0 #dddd88, 2px -2px 0 #dd8888, -2px 2px 0 #dd8888, 2px 2px 0 #dd8888;
+}
+
+.header a {
+	display: block;
+	margin: 0;
+	padding: 1em 0 0;
+	line-height: 0px;
+	max-height: 0px;
+	background: transparent;
+	color: #aa6060;
+	text-decoration: none;
+}
+
+.header a:hover {
+	color: #bb6060;
+	text-decoration: none;
+}
+
+.container {
+	width: 99.5%;
+	padding: 0.25%;
+}
+
+.content {
+	float: right; 
+	width: 84%; 
+	padding: 0
+	font-family: "Verdana";
+	display: block;
+}
+
+.content > h1, h2, h3, h4, h5, h6 {
+	color: #000000;
+	font-family: "Verdana";
+}
+
+.content > h1 {
+	color: #000000;
+	font-family: "Verdana";
+	margin-block-start: 0.5em;
+	margin-block-end: 0.5em;
+	font-weight: normal;
+	font-display: swap;
+	unicode-range: U+0000-A000;
+}
+
+.left-menu-container {
+	float: left; 
+	width: 14%;
+	/*border: 1px solid #000;*/
+}
+
+.left-menu {
+	background-color: #dddddd;
+	border: 1px solid #000000;
+	padding: 0.8em;
+	position: relative;
+	margin: 0 auto;
+}
+.left-menu:before {
+	background-color: #ffffff00;
+	border: 1px solid #cc7777;
+	content: "";
+	display: block;
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	right: 3px;
+	bottom: 3px;
+	pointer-events: none;
+}
+
+.left-menu a {
+	color: #bb2020;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.left-menu a:hover {
+	color: #dd4040;
+	text-decoration: underline;
+}
+
+.left-menu a:visited {
+	color: #dd6060;
+	text-decoration: none;
+}
+
+.top-menu-container, .top-menu {
+	float: left; 
+	width: 100%;
+}
+
+.top-menu {
+	margin-top: -9px;
+	padding: 5px;
+	font-family: "FuturaBookC";
+	background: #444444;
+	color: #ffffff;
+	font-size: 200%
+}
+
+.top-menu a {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.top-menu a:hover {
+	color: #ffbbbb;
+	text-decoration: none;
+}
+
+.top-menu a:visited {
+	color: #dd9999;
+	text-decoration: none;
+}
+
+/* Цитаты */
+
+.blockquote {
+	border: 2px solid #777777;
+	background-color: #ddd8d8;
+	padding: 0em 1em 0em 1em;
+	position: relative;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.blockquote:before {
+	background-color: #ffffff00;
+	border: 1px solid #aa4444;
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	pointer-events: none;
+}
+
+.blockquote-old {
+	border: 2px solid #000000;
+	background-color: #eeeecc;
+	padding: 0em 1em 0em 1em;
+	position: relative;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.blockquote-old:before {
+	background-color: #ffffff00;
+	border: 1px solid #cc0000;
+	content: "";
+	display: block;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	right: 2px;
+	bottom: 2px;
+	pointer-events: none;
+}
+
+.blockquote-progress {
+	border: 2px solid #444444;
+	background-color: #cccccc;
+	padding: 0em 1em 0em 1em;
+	position: relative;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	font-family: "FuturaBookC";
+	font-size: 1.2em;
+	background-image: url("data:image/svg+xml;utf8,<svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill: none; stroke: grey; stroke-width: 8; stroke-dasharray: 5 30'/></svg>");
+	box-shadow:
+		inset 0 0 0 5px #dddddd80;
+}
+
+.blockquote-handwritten {
+	border: 5px solid #ddddaa;
+	background-color: #eeeecc;
+	padding: 0em 1em 0em 0.5em;
+	position: relative;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	font-family: "Brush Font №1";
+	font-size: 1.8em;
+	font-variant: normal;
+	font-feature-settings: "kern", "liga", "calt";
+}
+
+/* Таблица */
+
+table {
+	border: 5px solid #333333;
+	border-collapse: collapse;
+	margin: 1px;
+	width: 100%;
+}
+
+/* Ячейка-заголовок */
+
+th {
+	border: 3px solid #666666;
+	padding: 0.3em;
+	font-weight: bold;
+	font-family: "FuturaDemiC";
+	font-size: 150%;
+	text-align: center;
+	background: #cccccc;
+}
+
+/* Обычная ячейка */
+
+td {
+	padding: 0.3em;
+	border: 2px solid #999999;
+	text-align: center;
+	background: #e0d8d8;
+}
+
+/* Таблица для картинок всяких */
+
+.image-div {  
+	margin: 0 0em 1em 2em;
+}
+
+.image-holder {
+	border: 1px solid #999999;
+	border-collapse: collapse;
+	width: 100%;
+	background: #ffffff;
+}
+
+/* Ячейка-заголовок */
+
+.image-holder th {
+	border: none;
+	padding: 0px; 
+	margin: 0px;
+	background: #ffffff;
+	border: 1px solid #999999;
+}
+
+/* Обычная ячейка */
+
+.image-holder td {
+	padding: 0px; 
+	margin: 0px;
+	border: none;
+	text-align: center;
+	background: #ffeeee;
+	font-weight: bold;
+	padding: 0.5em;
+	border: 1px solid #999999;
+}
+
+.image-holder img {
+	vertical-align: bottom;
+	display: block;
+}
+
+/* Подвинуты пункты маркированного списка левой менюшки */
+.left-menu ul li {
+	margin-left: -1.8em;
+	margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+
+/* Стиль для маркированного списка верхней менюшки */
+ul.top {
+	margin: 0; /* Обнуляем значение отступов */
+	padding-left: 50px; /* Значение полей */
+}
+ul.top li {
+	display: inline; /* Отображать как строчный элемент */
+	margin-right: 5px; /* Отступ слева */
+	padding: 3px; /* Поля вокруг текста */
+	margin-left: 4rem;
+}
+
+/* Человеческое отображение iframe'а */
+
+iframe[seamless] {
+	background-color: transparent;
+	border: 0px none transparent;
+	padding: 0px;
+	overflow: hidden;
+	font-family: "Verdana";
+}
+
+/* Стиль нижнего дива */
+
+.footer {
+	margin-top: -5px;
+	margin-bottom: 0px;
+	margin-right: 1%;
+	float: right; 
+	width: 84%;
+	margin-left: -0.5%;
+}
+
+.footer-content {
+	border: 1px solid #000;
+	float: right; 
+	width: 99%;
+	padding: 5px;
+	background: #ccaaaa;
+	color: #444444;
+	text-align: center;
+}
+
+.footer-content p {
+	margin-block-start: 0em;
+    margin-block-end: 0.4em;
+}
+
+/*Дефолтная рамка для отображения границ разрабатываемого или дебажимого дива:
+border: 1px solid #000;*/

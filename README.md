@@ -1,0 +1,3 @@
+# LTVA1.github.io
+
+My personal website for some experiments with HTML, CSS and JS. Maybe I'll write out my utopia world there (yes, worldbuilding forever!). However, since my native language is Russian, all my pages will be written in it. I will **not** host any images there except small ones that will be used in site navigation because there is 100GB limit. All my images will be uploaded ~~in gitlab "LTVA" repo~~ somewhere in discord lol because I have free nitro till around September.

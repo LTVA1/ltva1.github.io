@@ -1,0 +1,6 @@
+Set-Location C:\Users\Georg\Desktop\planet
+
+v1: C:\Users\Georg\Desktop\planet> .\planet.exe -s 0.000112 -w 40000 -h 20000 -o test.bmp -i -0.01 -n -p M -C Lefebvre.col
+
+v2: C:\Users\Georg\Desktop\planet> .\planet.exe -s 0.2342049 -w 32000 -h 16000 -o taingia_v2.bmp -i 0.01 -n -p m -C Lefebvre.col
+.\planet.exe -s 0.2342049 -w 32000 -h 16000 -o taingia_v2_close.bmp -i 0.01 -n -p m -C Lefebvre.col -m 70 -l 47 -L -22.5

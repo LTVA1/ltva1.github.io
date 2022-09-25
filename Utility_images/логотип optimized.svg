@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="136.063" height="136.063" viewBox="0 0 36 36" xmlns:v="https://vecta.io/nano">
+<style><![CDATA[.B{color-interpolation-filters:sRGB}]]>
+
+
+
+</style><defs><filter id="A" x="-.9" y="-.9" width="5.2" height="5.2" class="B"><feGaussianBlur stdDeviation="1.71 1.71"/></filter><filter id="B" x="-1" y="-1" width="5" height="5" class="B"><feGaussianBlur stdDeviation="1.2 1.2"/></filter><filter id="C" class="B"><feGaussianBlur stdDeviation="0.5 0.5"/></filter></defs>
+
+<circle cx="18" cy="18" r="15" fill="#d50" filter="url(#A)"/><g fill="none"><circle cx="18" cy="18" r="7.154" stroke="#e0e000" stroke-width="5" filter="url(#B)"/><circle cx="18" cy="18" r="6" stroke="#ff0" stroke-width=".9" filter="url(#C)"/></g></svg>
