@@ -145,6 +145,29 @@ class ElementButtonDMW
   }
 }
 
+class ElementButtonWAV
+{
+  constructor(_0x306e50, _0x349c9e, _0xd9c087) 
+  {
+    this.parent = _0x306e50, this.x = _0x349c9e ? _0x349c9e : 0, this.y = _0xd9c087 ? _0xd9c087 : 0, this.type = "buttonwav", this.onclick = function (_0x560fe6) {};
+  }
+  ["draw"]() 
+  {
+    var posX = this.x + this.parent.x + 2, posY = this.y + this.parent.y + 14;
+    fill(0), mouseDragEl == this ? image(GFX.button_wav_, posX, posY) : image(GFX.button_wav, posX, posY);
+  }
+  ["getBody"]() 
+  {
+    var butDmwPosX = this.x + this.parent.x + 2, butDmwPosY = this.y + this.parent.y + 14, Body = {};
+    return Body.x = butDmwPosX, Body.y = butDmwPosY, Body.width = 31, Body.height = 13, Body;
+  }
+  ["click"]() 
+  {
+    var _0x2f3482 = {};
+    _0x2f3482.target = this, this.onclick(_0x2f3482);
+  }
+}
+
 class ElementText 
 {
   constructor(_0x4c9d76, _0x49b0cc, _0x10d147, text) 
@@ -156,6 +179,185 @@ class ElementText
     drawText(this.value, posX, posY);
   }
 }
+
+// WIP
+var waves = [];
+
+// 0 Sine
+waves.push(function(val, obj) {
+  return Math.sin(val * obj.final_multiplier + obj.final_phase * Math.PI * 2);
+});
+
+// 1 Rectified sine
+waves.push(function(val, obj) {
+  return Math.max(waves[0](val, obj), 0);
+});
+
+// 2 Absolute sine
+waves.push(function(val, obj) {
+  return Math.abs(waves[0](val, obj));
+});
+
+// 3 Quarter sine
+waves.push(function(val, obj) {
+  return ((val * obj.final_multiplier + obj.final_phase * Math.PI * 2) % Math.PI) <= (Math.PI / 2) ? waves[2](val, obj) : 0;
+  //return (val % Math.PI + obj.final_phase) <= Math.PI / 2 ? waves[2](val, obj) : 0;
+});
+
+// 4 Squished sine
+waves.push(function(val, obj) {
+  return waves[0](val, obj) >= 0 ? Math.sin(val * obj.final_multiplier * 2 + obj.final_phase * Math.PI * 4) : 0;
+  //return waves[0](val, obj) >= 0 ? waves[0](val * 2, obj) : 0;
+});
+
+// 5 Squished Absolute sine
+waves.push(function(val, obj) {
+  //console.log(val);
+  //return ((val * obj.final_multiplier + obj.final_phase * Math.PI * 2) % Math.PI/2) >= 0 ? waves[2](val * 2, obj) : 0;
+  // return waves[0](val, obj) >= 0 ? waves[2](val * 2, obj) : 0;
+  return Math.abs(waves[4](val, obj));
+});
+
+// 6 Sawtooth
+waves.push(function(val, obj) {
+  return (((val / (Math.PI * 2) * obj.final_multiplier + obj.final_phase) % 1 + 1) % 1 * 2 - 1) /** obj.final_amplitude*/;
+});
+
+// 7 Rectified sawtooth
+waves.push(function(val, obj) {
+  return waves[6](val, obj) < 0 ? waves[6](val, obj) + obj.final_amplitude : 0;
+});
+
+// 8 Absolute Sawtooth
+waves.push(function(val, obj) {
+  return waves[6](val, obj) < 0 ? waves[6](val, obj) + obj.final_amplitude : waves[6](val, obj);
+});
+
+// 9 Cubed Sawtooth
+waves.push(function(val, obj) {
+  return Math.pow(waves[6](val, obj), 3);
+});
+
+// 10 Cubed Sine
+waves.push(function(val, obj) {
+  return Math.pow(waves[0](val, obj), 3);
+});
+
+// 11 Rectified Cubed sine
+waves.push(function(val, obj) {
+  return Math.max(waves[10](val, obj), 0);
+});
+
+// 12 Absolute Cubed sine
+waves.push(function(val, obj) {
+  return Math.abs(waves[10](val, obj));
+});
+
+// 13 Quarter Cubed sine
+waves.push(function(val, obj) {
+  // return (val % Math.PI) <= Math.PI / 2 ? waves[12](val, obj) : 0;
+  return Math.pow(waves[3](val, obj), 3);
+});
+
+// 14 Squished Cubed sine
+waves.push(function(val, obj) {
+  //return waves[0](val, obj) >= 0 ? waves[10](val * 2, obj) : 0;
+  return Math.pow(waves[4](val, obj), 3);
+});
+
+// 15 Squished Absolute Cubed sine
+waves.push(function(val, obj) {
+  //return waves[0](val, obj) >= 0 ? waves[12](val * 2, obj) : 0;
+  return Math.pow(waves[5](val, obj), 3);
+});
+
+// 16 Triangle
+waves.push(function(val, obj) {
+  return (Math.asin(Math.sin(val * obj.final_multiplier + obj.final_phase * Math.PI * 2))) / (Math.PI / 2);
+});
+
+// 17 Rectified Triangle
+waves.push(function(val, obj) {
+  return Math.max(waves[16](val, obj), 0);
+});
+
+// 18 Absolute Triangle
+waves.push(function(val, obj) {
+  return Math.abs(waves[16](val, obj));
+});
+
+// 19 Quarter Triangle
+waves.push(function(val, obj) {
+  return ((val * obj.final_multiplier + obj.final_phase * Math.PI * 2) % Math.PI) <= (Math.PI / 2) ? waves[18](val, obj) : 0;
+});
+
+// 20 Squished Triangle
+waves.push(function(val, obj) {
+  // return waves[0](val, obj) >= 0 ? Math.sin(val * obj.final_multiplier * 2 + obj.final_phase * Math.PI * 4) : 0;
+  return waves[0](val, obj) >= 0 ? (Math.asin(Math.sin(val * obj.final_multiplier * 2 + obj.final_phase * Math.PI * 4))) / (Math.PI / 2) : 0;
+});
+
+// 21 Squished Absolute Triangle
+waves.push(function(val, obj) {
+  // return waves[0](val, obj) >= 0 ? waves[18](val * 2, obj) : 0;
+  return Math.abs(waves[20](val, obj));
+});
+
+// 22 Cubed Triangle
+waves.push(function(val, obj) {
+  return Math.pow(waves[16](val, obj), 3);
+});
+
+// 23 Rectified Cubed Triangle
+waves.push(function(val, obj) {
+  return Math.max(waves[22](val, obj), 0);
+});
+
+// 24 Absolute Cubed Triangle
+waves.push(function(val, obj) {
+  return Math.abs(waves[22](val, obj));
+});
+
+// 25 Quarter Cubed Triangle
+waves.push(function(val, obj) {
+  // return (val % Math.PI) <= Math.PI / 2 ? waves[24](val, obj) : 0;
+  return Math.pow(waves[19](val, obj), 3);
+});
+
+// 26 Squished Cubed Triangle
+waves.push(function(val, obj) {
+  return Math.pow(waves[20](val, obj), 3);
+});
+
+// 27 Squished Absolute Cubed Triangle
+waves.push(function(val, obj) {
+  return Math.pow(waves[21](val, obj), 3);
+});
+
+// 28 Square
+waves.push(function(val, obj) {
+  return Math.sign(waves[0](val, obj));
+});
+
+// 29 Rectified Square
+waves.push(function(val, obj) {
+  return Math.max(waves[28](val, obj), 0);
+});
+
+// 30 Quarter Square
+waves.push(function(val, obj) {
+  //return (val % Math.PI) <= Math.PI / 4 ? waves[28](val * 4, obj) : 0; ?????????????????
+  // return Math.sign(waves[3](val, obj));
+  return ((val * obj.final_multiplier + obj.final_phase * Math.PI * 2) % Math.PI) <= (Math.PI / 4) ? Math.sign(waves[2](val * 2, obj)) : 0;
+});
+
+// 31 Squished Square
+waves.push(function(val, obj) {
+  //return waves[0](val, obj) >= 0 ? waves[28](val * 2, obj) : 0;
+  return Math.sign(waves[4](val, obj));
+});
+
+
 
 class ElementWindow 
 {
@@ -204,12 +406,19 @@ class ElementWindow
         var _0x478606 = 0;
         return _0x44dcbd.inputs[0] && (_0x478606 += _0x44dcbd.inputs[0].function(_0x9df863, _0x44dcbd.inputs[0])), _0x478606 * _0x44dcbd.amplitude;
       }, this.inputCount = 1, this.outputCount = 0, this.title = "Output", this.closeButton = false;
+
+      var btnSaveWav = new ElementButtonWAV(this, 40, 80);
+      btnSaveWav.onclick = function (button) 
+	  {
+      button.target.parent.createWAV();
+      }, this.appendNode(btnSaveWav);
+
     }
 	
     if (this.type == "help") 
 	{
       this.width = 210, this.height = 368;
-      var helpText = new ElementText(this, 0, 0, "Hello!\nThis is an N163\n(and other wavetable synth chips)\nmodular synth for Dn-FamiTracker.\n(And Deflemask and possibly Furnace)\n\nMade by Eulous!\nHacked and deobfuscated by LTVA\nand System64! (Eulous you asshole!)\n\n- Keyboard Shortcuts -\n1 - Sine\n2 - Sawtooth\n3 - Triangle\n4 - Pulse\n5 - Noise\n6 - Pulse Noise\nShift+5 - Consistent Noise\nShift+6 - Consistent P. Noise\nM - Mixer\nShift+M - Splitter\nI - Inverter\nF - PM Feedback\nP - PM\nR - RM\nG - Gainer\nS - Sync\nQ - Quantization\nB - Bitcrusher\nL - Lowpass Filter\nH - Highpass Filter\n\nDouble-click on a\ncontrol to reset it.");
+      var helpText = new ElementText(this, 0, 0, "Hello!\nThis is an N163\n(and other wavetable synth chips)\nmodular synth for Dn-FamiTracker.\n(And Deflemask and possibly Furnace)\n\nMade by Eulous!\nHacked and deobfuscated by LTVA\nand System64! (Eulous you asshole!)\n\n- Keyboard Shortcuts -\n1 - Sine\n2 - Sawtooth\n3 - Triangle\n4 - Pulse\n5 - Noise\n6 - Pulse Noise\n7 - Oscillator\nShift+5 - Consistent Noise\nShift+6 - Consistent P. Noise\nM - Mixer\nShift+M - Splitter\nI - Inverter\nF - PM Feedback\nP - PM\nR - RM\nG - Gainer\nS - Sync\nQ - Quantization\nB - Bitcrusher\nL - Lowpass Filter\nH - Highpass Filter\n\nDouble-click on a\ncontrol to reset it.");
 	  
       this.appendNode(helpText), this.inputCount = 0, this.outputCount = 0, this.title = "Help", this.closeButton = false;
     }
@@ -235,6 +444,40 @@ class ElementWindow
         _0xa11286.target.parent.mod_amplitude = _0xa11286.value;
       }, this.appendNode(_0x44a157), this.appendNode(_0xe58e27), this.appendNode(_0x3373a4), this.outputCount = 1, this.title = "Sine Oscillator";
     }
+    
+    
+
+    if (this.type == "osc")
+    {
+      this.width = 170, this.height = 100, this.function = function (_0x48f883, obj) {
+        //return Math.pow(Math.sin(_0x48f883 * obj.final_multiplier + obj.final_phase * Math.PI * 2), 3) * obj.final_amplitude;
+        return waves[0](_0x48f883, obj) * obj.final_amplitude;
+      };
+      var _0x9af687 = new ElementSlider(this, 0, 4, 110, 1, 0, 15, 1), _0x15e0d3 = new ElementSlider(this, 0, 17, 110, 0.01, 0, 1, 0), _0x344d32 = new ElementSlider(this, 0, 30, 110, 0.01, 0, 2, 1), waveSlider = new ElementSlider(this, 0, 47, 110, 1, 0, waves.length - 1, 0);
+      _0x9af687.onchange = function (_0x4252af) {
+        _0x4252af.target.parent.multiplier = _0x4252af.value;
+      }, _0x15e0d3.onchange = function (_0x5c7510) {
+        _0x5c7510.target.parent.phase = _0x5c7510.value;
+      }, _0x344d32.onchange = function (_0x2e13af) {
+        _0x2e13af.target.parent.amplitude = _0x2e13af.value;
+      }, 
+      waveSlider.onchange = function(slider) 
+      {
+        slider.target.parent.function = function(_0x48f883, obj) {
+          return waves[slider.value](_0x48f883, obj) * obj.final_amplitude;
+        }
+      }
+      this.appendNode(_0x9af687), this.appendNode(_0x15e0d3), this.appendNode(_0x344d32), this.appendNode(waveSlider);
+      var _0x44a157 = new ElementKnob(this, 0, this.height - 32, -12, 12), _0xe58e27 = new ElementKnob(this, 17, this.height - 32, -1, 1), _0x3373a4 = new ElementKnob(this, 34, this.height - 32, -1, 1);
+      _0x44a157.onchange = function (_0xf04e3f) {
+        _0xf04e3f.target.parent.mod_multiplier = _0xf04e3f.value;
+      }, _0xe58e27.onchange = function (_0x2c18db) {
+        _0x2c18db.target.parent.mod_phase = _0x2c18db.value;
+      }, _0x3373a4.onchange = function (_0xa11286) {
+        _0xa11286.target.parent.mod_amplitude = _0xa11286.value;
+      }, this.appendNode(_0x44a157), this.appendNode(_0xe58e27), this.appendNode(_0x3373a4), this.outputCount = 1, this.title = "Oscillator";
+    }
+
     if (this.type == "sawtooth") {
       this.width = 170, this.height = 80, this.function = function (_0x43b5fc, _0xadceb4) {
         return (((_0x43b5fc / (Math.PI * 2) * _0xadceb4.final_multiplier + _0xadceb4.final_phase) % 1 + 1) % 1 * 2 - 1) * _0xadceb4.final_amplitude;
@@ -606,7 +849,7 @@ class ElementWindow
       }
     }
     this.closeButton && (mouseX >= this.x + this.width - 13 && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + 13 && !mouseDragWindow && _0x1b93e5 == this ? (!mousePressing ? image(GFX.x_, this.x + this.width - 12, this.y + 1) : image(GFX.x, this.x + this.width - 12, this.y + 1), cursor("pointer")) : mouseCloseWindow == this ? image(GFX.x_, this.x + this.width - 12, this.y + 1) : image(GFX.x, this.x + this.width - 12, this.y + 1));
-    if (this.type == "sine" || this.type == "sawtooth" || this.type == "triangle" || this.type == "pulse" || this.type == "noise" || this.type == "pulsenoise" || this.type == "noiseconsistent" || this.type == "pulsenoiseconsistent") {
+    if (this.type == "sine" || this.type == "sawtooth" || this.type == "triangle" || this.type == "pulse" || this.type == "noise" || this.type == "pulsenoise" || this.type == "noiseconsistent" || this.type == "pulsenoiseconsistent" || this.type == "osc") {
       rect(this.x + this.width - 3 - 65, this.y + this.height - 3, 66, 1), rect(this.x + this.width - 3 - 65, this.y + this.height - 20, 66, 1), rect(this.x + this.width - 3 - 65, this.y + this.height - 20, 1, 17), rect(this.x + this.width - 3, this.y + this.height - 20, 1, 17);
       for (var _0x350bbb = 0; _0x350bbb < 64; _0x350bbb += 0.25) {
         var _0x3f68c3 = Math.min(Math.max(Math.floor(this.function(_0x350bbb * Math.PI * 2 / 64, this) * 15 / 2 + 8), 0), 15), _0x5e3e0a = Math.min(Math.max(Math.floor(this.function((_0x350bbb + 0.25) % 64 * Math.PI * 2 / 64, this) * 15 / 2 + 8), 0), 15);
@@ -757,6 +1000,23 @@ class ElementWindow
     var _0xfa940c = new Blob([new Uint8Array(_0x53533c)], {type: "application/octet-stream"});
     saveAs(URL.createObjectURL(_0xfa940c), "patch.dmw"), URL.revokeObjectURL(_0xfa940c);
   }
+
+  ["createWAV"]() {
+    var out = [];
+    // out.push(this.waveLength), out.push(0), out.push(0), out.push(0), _0x53533c.push(255), _0x53533c.push(1), _0x53533c.push(255);
+    for (var _0x16d9ba = 0; _0x16d9ba < this.waveLength; _0x16d9ba++) {
+      var _0x56263e = 0;
+      if (this.inputs[0]) for (var _0xe7ea2 = 0; _0xe7ea2 < 1; _0xe7ea2 += 0.25) {
+        _0x56263e += this.inputs[0].function((_0x16d9ba + _0xe7ea2) * Math.PI * 2 / this.waveLength, this.inputs[0]) * 0.25;
+      }
+      out.push(Math.floor((_0x56263e * 0.5) * 65535));
+      //console.log(Math.floor((_0x56263e * 0.5 + 0.5) * 65535));
+    }
+    //var dataview = encodeWAV(out, 44100);
+    var audioBlob = new Blob([new Int16Array(out)], {type: "application/octet-stream"});
+    saveAs(URL.createObjectURL(audioBlob), "out.wav"), URL.revokeObjectURL(audioBlob);
+    //this.postMessage(audioBlob);
+  }
 }
 
 var wireEnd = [[-1, -1, 1, 1, 1, 1, 1, -1, -1], [-1, 1, 0, 0, 0, 0, 0, 1, -1], [1, 0, 0, 1, 1, 1, 0, 0, 1], [1, 0, 1, 1, 1, 1, 1, 0, 1], [1, 0, 1, 1, 1, 1, 1, 0, 1], [1, 0, 1, 1, 1, 1, 1, 0, 1], [1, 0, 0, 1, 1, 1, 0, 0, 1], [-1, 1, 0, 0, 0, 0, 0, 1, -1], [-1, -1, 1, 1, 1, 1, 1, -1, -1]], needsUpdate = false, modulation = 1, m1, m2, o1, o2, o3;
@@ -768,11 +1028,11 @@ function preload()
 
 function setup() 
 {
-  createCanvas(innerWidth, innerHeight), noStroke(), GFX.x = loadImage("x.png"), GFX.x_ = loadImage("x_.png"), GFX.slider_thumb = loadImage("slider_thumb.png"), GFX.slider_thumb_ = loadImage("slider_thumb_.png"), GFX.button_copy = loadImage("button_copy.png"), GFX.button_copy_ = loadImage("button_copy_.png"), GFX.button_dmw = loadImage("button_dmw.png"), GFX.button_dmw_ = loadImage("button_dmw_.png"), GFX.wheel = loadImage("wheel.png"), GFX.numbers = loadImage("numbers.png"), GFX.mul = loadImage("mul.png"), GFX.phs = loadImage("phs.png"), GFX.amp = loadImage("amp.png"), GFX.text_lowercase = loadImage("text_lowercase.png"), GFX.text_uppercase = loadImage("text_uppercase.png"), GFX.text_lowercase_black = loadImage("text_lowercase_black.png"), GFX.text_uppercase_black = loadImage("text_uppercase_black.png"), GFX.text_symbols_black = loadImage("text_symbols_black.png"), GFX.text_numbers_black = loadImage("text_numbers_black.png");
+  createCanvas(innerWidth, innerHeight), noStroke(), GFX.x = loadImage("x.png"), GFX.x_ = loadImage("x_.png"), GFX.slider_thumb = loadImage("slider_thumb.png"), GFX.slider_thumb_ = loadImage("slider_thumb_.png"), GFX.button_copy = loadImage("button_copy.png"), GFX.button_copy_ = loadImage("button_copy_.png"), GFX.button_dmw = loadImage("button_dmw.png"), GFX.button_dmw_ = loadImage("button_dmw_.png"), GFX.button_wav = loadImage("button_wav.png"), GFX.button_wav_ = loadImage("button_wav_.png"), GFX.wheel = loadImage("wheel.png"), GFX.numbers = loadImage("numbers.png"), GFX.mul = loadImage("mul.png"), GFX.phs = loadImage("phs.png"), GFX.amp = loadImage("amp.png"), GFX.text_lowercase = loadImage("text_lowercase.png"), GFX.text_uppercase = loadImage("text_uppercase.png"), GFX.text_lowercase_black = loadImage("text_lowercase_black.png"), GFX.text_uppercase_black = loadImage("text_uppercase_black.png"), GFX.text_symbols_black = loadImage("text_symbols_black.png"), GFX.text_numbers_black = loadImage("text_numbers_black.png");
   
   pixelDensity(1);
   
-  var _0x347002 = new ElementWindow(20, 20, "sine"), _0x9496ae = new ElementWindow(512, 20, "output");
+  var _0x347002 = new ElementWindow(20, 20, "osc"), _0x9496ae = new ElementWindow(512, 20, "output");
   
   new ElementWindow(innerWidth - 160 - 20 - 40, innerHeight - 332 - 47, "help"), _0x347002.outputs = [_0x9496ae], _0x347002.inputMapping = [0], _0x9496ae.inputs = [_0x347002];
   
@@ -1058,7 +1318,7 @@ function mousePressed() {
         break;
       }
     }
-    if (_0x3e2643.elements[_0x57f0b2].type == "buttoncopy" || _0x3e2643.elements[_0x57f0b2].type == "buttondmw") {
+    if (_0x3e2643.elements[_0x57f0b2].type == "buttoncopy" || _0x3e2643.elements[_0x57f0b2].type == "buttondmw" || _0x3e2643.elements[_0x57f0b2].type == "buttonwav") {
       var _0x56a13a = _0x3e2643.elements[_0x57f0b2].getBody();
       if (mouseX >= _0x56a13a.x && mouseX < _0x56a13a.x + _0x56a13a.width && mouseY >= _0x56a13a.y && mouseY < _0x56a13a.y + _0x56a13a.height) {
         mouseDragEl = _0x3e2643.elements[_0x57f0b2];
@@ -1080,7 +1340,7 @@ function mouseDragged() {
 function mouseReleased() {
   mouseCloseWindow && (mouseCloseWindow.onClose() && mouseCloseWindow.remove());
   if (mouseDragEl) {
-    if (mouseDragEl.type == "buttoncopy" || mouseDragEl.type == "buttondmw") {
+    if (mouseDragEl.type == "buttoncopy" || mouseDragEl.type == "buttondmw" || mouseDragEl.type == "buttonwav") {
       var _0x3bf675 = mouseDragEl.getBody();
       mouseX >= _0x3bf675.x && mouseX < _0x3bf675.x + _0x3bf675.width && mouseY >= _0x3bf675.y && mouseY < _0x3bf675.y + _0x3bf675.height && (mouseDragEl.click(), mouseDragEl = null);
     }
@@ -1121,10 +1381,10 @@ window.onresize = function () {
   }
   
   var _0x48208d;
-  !_0x16a731.shiftKey && _0x16a731.code == "KeyM" && (_0x48208d = new ElementWindow(mouseX - Math.floor(35), mouseY - Math.floor(25), "mixer")), _0x16a731.shiftKey && _0x16a731.code == "KeyM" && (_0x48208d = new ElementWindow(mouseX - Math.floor(35), mouseY - Math.floor(25), "splitter")), !_0x16a731.shiftKey && _0x16a731.code == "KeyI" && (_0x48208d = new ElementWindow(mouseX - Math.floor(35), mouseY - Math.floor(25), "inverter")), !_0x16a731.shiftKey && _0x16a731.code == "Digit1" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(40), "sine")), !_0x16a731.shiftKey && _0x16a731.code == "Digit2" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(40), "sawtooth")), !_0x16a731.shiftKey && _0x16a731.code == "Digit3" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(40), "triangle")), !_0x16a731.shiftKey && _0x16a731.code == "Digit4" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(46.5), "pulse")), !_0x16a731.shiftKey && _0x16a731.code == "Digit5" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(27), "noise")), !_0x16a731.shiftKey && _0x16a731.code == "Digit6" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(27), "pulsenoise")), _0x16a731.shiftKey && _0x16a731.code == "Digit5" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(27), "noiseconsistent")), _0x16a731.shiftKey && _0x16a731.code == "Digit6" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(27), "pulsenoiseconsistent")), !_0x16a731.shiftKey && _0x16a731.code == "KeyP" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "phasemodulation")), !_0x16a731.shiftKey && _0x16a731.code == "KeyR" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "ringmodulation")), !_0x16a731.shiftKey && _0x16a731.code == "KeyG" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "gainer")), !_0x16a731.shiftKey && _0x16a731.code == "KeyQ" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "quantizer")), !_0x16a731.shiftKey && _0x16a731.code == "KeyB" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "bitcrusher")), !_0x16a731.shiftKey && _0x16a731.code == "KeyL" && (_0x48208d = new ElementWindow(mouseX - Math.floor(83.5), mouseY - Math.floor(44), "lowpass")), !_0x16a731.shiftKey && _0x16a731.code == "KeyH" && (_0x48208d = new ElementWindow(mouseX - Math.floor(83.5), mouseY - Math.floor(44), "highpass")), !_0x16a731.shiftKey && _0x16a731.code == "KeyS" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "syncer")), !_0x16a731.shiftKey && _0x16a731.code == "KeyF" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "feedback")), _0x48208d && (_0x48208d.x < 0 && (_0x48208d.x = 0), _0x48208d.y < 0 && (_0x48208d.y = 0), _0x48208d.x > innerWidth - _0x48208d.width && (_0x48208d.x = innerWidth - _0x48208d.width), _0x48208d.y > innerHeight - _0x48208d.height && (_0x48208d.y = innerHeight - _0x48208d.height));
+  !_0x16a731.shiftKey && _0x16a731.code == "KeyM" && (_0x48208d = new ElementWindow(mouseX - Math.floor(35), mouseY - Math.floor(25), "mixer")), _0x16a731.shiftKey && _0x16a731.code == "KeyM" && (_0x48208d = new ElementWindow(mouseX - Math.floor(35), mouseY - Math.floor(25), "splitter")), !_0x16a731.shiftKey && _0x16a731.code == "KeyI" && (_0x48208d = new ElementWindow(mouseX - Math.floor(35), mouseY - Math.floor(25), "inverter")), !_0x16a731.shiftKey && _0x16a731.code == "Digit7" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(40), "osc")), !_0x16a731.shiftKey && _0x16a731.code == "Digit2" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(40), "sawtooth")), !_0x16a731.shiftKey && _0x16a731.code == "Digit3" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(40), "triangle")), !_0x16a731.shiftKey && _0x16a731.code == "Digit4" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(46.5), "pulse")), !_0x16a731.shiftKey && _0x16a731.code == "Digit5" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(27), "noise")), !_0x16a731.shiftKey && _0x16a731.code == "Digit6" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(27), "pulsenoise")), _0x16a731.shiftKey && _0x16a731.code == "Digit5" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(27), "noiseconsistent")), _0x16a731.shiftKey && _0x16a731.code == "Digit6" && (_0x48208d = new ElementWindow(mouseX - Math.floor(80), mouseY - Math.floor(27), "pulsenoiseconsistent")), !_0x16a731.shiftKey && _0x16a731.code == "KeyP" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "phasemodulation")), !_0x16a731.shiftKey && _0x16a731.code == "KeyR" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "ringmodulation")), !_0x16a731.shiftKey && _0x16a731.code == "KeyG" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "gainer")), !_0x16a731.shiftKey && _0x16a731.code == "KeyQ" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "quantizer")), !_0x16a731.shiftKey && _0x16a731.code == "KeyB" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "bitcrusher")), !_0x16a731.shiftKey && _0x16a731.code == "KeyL" && (_0x48208d = new ElementWindow(mouseX - Math.floor(83.5), mouseY - Math.floor(44), "lowpass")), !_0x16a731.shiftKey && _0x16a731.code == "KeyH" && (_0x48208d = new ElementWindow(mouseX - Math.floor(83.5), mouseY - Math.floor(44), "highpass")), !_0x16a731.shiftKey && _0x16a731.code == "KeyS" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "syncer")), !_0x16a731.shiftKey && _0x16a731.code == "KeyF" && (_0x48208d = new ElementWindow(mouseX - Math.floor(70), mouseY - Math.floor(37.5), "feedback")), _0x48208d && (_0x48208d.x < 0 && (_0x48208d.x = 0), _0x48208d.y < 0 && (_0x48208d.y = 0), _0x48208d.x > innerWidth - _0x48208d.width && (_0x48208d.x = innerWidth - _0x48208d.width), _0x48208d.y > innerHeight - _0x48208d.height && (_0x48208d.y = innerHeight - _0x48208d.height));
 };
 
-var windowtypes = ["output", "help", "sine", "sawtooth", "triangle", "pulse", "noise", "pulsenoise", "noiseconsistent", "pulsenoiseconsistent", "mixer", "splitter", "inverter", "feedback", "phasemodulation", "ringmodulation", "gainer", "sync", "quantization", "bitcrusher", "lowpass", "highpass"];
+var windowtypes = ["output", "help", "sine", "sawtooth", "triangle", "pulse", "noise", "pulsenoise", "noiseconsistent", "pulsenoiseconsistent", "mixer", "splitter", "inverter", "feedback", "phasemodulation", "ringmodulation", "gainer", "sync", "quantization", "bitcrusher", "lowpass", "highpass", "osc"];
 
 function fileExport() 
 {
