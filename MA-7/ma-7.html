@@ -25,7 +25,7 @@
 			<p>Chip has several FM channels. Each channel can be 4-op or 2-op (?) probably, like in OPL3, 2 2-op channels can be combined into 1 4-op channel. Each channel has 2 2-op and 6 4-op algorithms. Some algorithms feature feedback on two operators.</p>
 			<p>Each FM channel has 32-step panning.</p>
 			<p>Each FM channel has weird LFO selector, 0-3. It actually controls tremolo speed (AM speed). Each FM operator has a toggle for vibrato and tremolo LFO, and 4-step control over tremolo and vibrato depth, although I could hear only tremolo, vibrato wasn't present.</p>
-			<p>Each FM channel has lowpass resonant filter with envelope. Resonance is 0-31, envelope has 5 points, for each cutoff control is 0-8184. Envelope has sustain flag and don't react on keypress flag. Envelope rates are 0-31, there are 4 such rates, labeled AR, DR, SR and RR. Also LFO is present, its effect is combined with envelope. LFO has two shapes, triangle and semi-random (labeled as S&H?). LFO has 0-7 frequency and depth controls.</p>
+			<p>Each FM channel has lowpass resonant filter with envelope. Resonance is 0-31, envelope has 5 points, for each cutoff control is 0-8184. Envelope has sustain flag and ignore key-off flag. Envelope rates are 0-31, there are 4 such rates, labeled AR, DR, SR and RR. Also LFO is present, its effect is combined with envelope. LFO has two shapes, triangle and semi-random (labeled as S&H?). LFO has 0-7 frequency and depth controls.</p>
 			<p>Each operator can be turned on and off (opmask?). Each operator has 32 waveforms to choose from, they are the same as on YMF825:</p>
 			<div class="image-div" style="width: 400px; float: right">
 				<table class="image-holder">
@@ -39,7 +39,7 @@
 				</table>
 			</div>
 			<p>Three missing waveforms are global RAM-stored waveforms you can specify. MA-7 author tool supports 16-bit PCM wav files and clamps them at 1024 samples length, so that's the format waves use.</p>
-			<p>Each operator has ADSR envelope with sustain rate. AR, DR, SR and RR are 0-31, sustain level is 0-15. Total level is 0-63. There are flags to enable sustain, to ignore keypress for envelope, to enable vibrato and tremolo. Vibrato and tremolo depth controls are 0-3. Still, I can't hear any vibrato even with the max depth. Each operator has KSR toggle (envelope speed) and 4-step key scaling level strength control (volume scaling). Feedback is 0-7 for those operators that have it. Detune is 0-15.</p>
+			<p>Each operator has ADSR envelope with sustain rate. AR, DR, SR and RR are 0-31, sustain level is 0-15. Total level is 0-63. There are flags to enable sustain, to ignore key-off for envelope, to enable vibrato and tremolo. Vibrato and tremolo depth controls are 0-3. Still, I can't hear any vibrato even with the max depth. Each operator has KSR toggle (envelope speed) and 4-step key scaling level strength control (volume scaling). Feedback is 0-7 for those operators that have it. Detune is 0-15.</p>
 			<p>Each operator can be put in fixed frequency mode where operator's frequency can be independently set.</p>
 			<br>
 
@@ -47,6 +47,7 @@
 
 			<p>Chip seems to support 4-bit ADPCM, as well as 8- and 16-bit PCM samples. You can specify "base" sampling frequency, as well as start and end of looped section (so it supports loop point). Volume envelope and filter block are identical with FM channel, as well as vibrato/tremolo/panning controls.</p>
 			<p>You can choose either MIDI bank sample (stored in chip ROM?? or loaded from phone memory), custom sample or noise for playback. Length of sample cannot exceed 16386 bytes. Seems that chip has around 16 KiB of RAM for samples.</p>
+			<p>PCM/ADPCM channel has pitch envelope. It is identical to filter envelope, but instead of cutoff control points are -127 to 127 and control realtive pitch change (in semitones?). It doesn't have "key follow" flag.</p>
 			<br>
 
 			<h2>Vocaloid/speech synth channels???</h2>
