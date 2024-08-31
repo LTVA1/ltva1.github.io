@@ -52,6 +52,7 @@
 
 			<h2>Audio channels</h2>
 			<p>This seems to be the streamed audio section. It's unknown how exactly audio is streamed but seems like it requires external CPU or whatever to provide properly timed and generated PCM stream. MA-7 author tool provides 16 "Audio" channels, two last of them are used to playback 2 different ADPCM samples simultaneously in MA-7 authoring tool demo project. If you try to place playbacks of these samples on more "Audio" channels, all except two of them go silent. So the max number of simultaneously playing channels is two, at least in MA-7 authoring tool.</p>
+			<br>
 
 			<h2>Vocaloid/speech synth channels???</h2>
 			<p>Chip has some speech synth capabilities. HV editor (HV probably stands for human voice) features unknown functionality point envelope (called "formant") and the array of 8 control blocks. Each block has the following settings: volume, frequency offset (signed, in cents), waveform (the same as in FM channel editor), 0-3 LFO speed, AM and vibrato toggles and 0-3 depth controls. There's also one "Prosodic Volume Enable" (sic!) checkbox in the editor.</p>
