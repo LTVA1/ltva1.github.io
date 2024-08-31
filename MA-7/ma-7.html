@@ -47,8 +47,11 @@
 
 			<p>Chip seems to support 4-bit ADPCM, as well as 8- and 16-bit PCM samples. You can specify "base" sampling frequency, as well as start and end of looped section (so it supports loop point). Volume envelope and filter block are identical with FM channel, as well as vibrato/tremolo/panning controls.</p>
 			<p>You can choose either MIDI bank sample (stored in chip ROM?? or loaded from phone memory), custom sample or noise for playback. Length of sample cannot exceed 16386 bytes. Seems that chip has around 16 KiB of RAM for samples.</p>
-			<p>PCM/ADPCM channel has pitch envelope. It is identical to filter envelope, but instead of cutoff control points are -127 to 127 and control realtive pitch change (in semitones?). It doesn't have "key follow" flag.</p>
+			<p>PCM/ADPCM channel has pitch envelope. It is identical to filter envelope, but instead of cutoff control points are -127 to 127 and control relative pitch change (in semitones?). It doesn't have "key follow" flag.</p>
 			<br>
+
+			<h2>Audio channels</h2>
+			<p>This seems to be the streamed audio section. It's unknown how exactly audio is streamed but seems like it requires external CPU or whatever to provide properly timed and generated PCM stream. MA-7 author tool provides 16 "Audio" channels, two last of them are used to playback 2 different ADPCM samples simultaneously in MA-7 authoring tool demo project. If you try to place playbacks of these samples on more "Audio" channels, all except two of them go silent. So the max number of simultaneously playing channels is two, at least in MA-7 authoring tool.</p>
 
 			<h2>Vocaloid/speech synth channels???</h2>
 			<p>Chip has some speech synth capabilities. HV editor (HV probably stands for human voice) features unknown functionality point envelope (called "formant") and the array of 8 control blocks. Each block has the following settings: volume, frequency offset (signed, in cents), waveform (the same as in FM channel editor), 0-3 LFO speed, AM and vibrato toggles and 0-3 depth controls. There's also one "Prosodic Volume Enable" (sic!) checkbox in the editor.</p>
@@ -59,6 +62,7 @@
 			<p>Now it is unclear what's the speech synth implementation is. Waveform looks like it's CSM mode but for 8 operators. It is unclear if there are some dedicated hardware channels used for that or 4 2-op channels are put into some special mode to output CSM fundamental frequency + 8 of their own frequencies. There aren't any "noisy" syllables so probably no modulation is happening.</p>
 			<p>That's why it's unclear what Yamaha tried to say with "up to 128 voices". Since each FM operator has its own frequency control in fixed mode, PR/marketing team could just count FM operators, add in PCM/ADPCM channels and call it a 128 voices polyphony.</p>
 			<p>If chip really has 128 voices polyphony, then how? For example, it's known that MA-3 in 2-op mode has 32 FM channels. This leaves 96 channels. Let's assume that there are 32 more channels for PCM/ADPCM. You still have 64 channels for... whatever. So I think that it either has more FM channels, some of which are only for speech synth, or Yamaha lied.</p>
+			<p>MA-7 authoring tool says that for MA-7 only "Normal" mode is supported. In manual it's said that mode supports 32 FM + 32 PCM + 2 Audio (streamed) + 1 HV (speech synth) channels. This totals up to 67 channels. Still not 128...</p>
 			<br>
 
 			<h2>DSP effects</h2>
