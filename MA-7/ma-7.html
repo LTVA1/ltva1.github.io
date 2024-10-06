@@ -13,15 +13,50 @@
 			<hr>
 			<p>On this page I will collect all the info I have about Yamaha MA-7 (Mobile Audio 7, YMU786). You can find some info about MA-x series chips <a href="https://gist.github.com/bryc/e85315f758ff3eced19d2d4fdeef01c5">here</a>.</p>
 			<br>
-			<h2>Overview</h2>
-			<p>Right now I don't have a real chip on my hands, so everything you will see is info collected from <a href="./ATS-MA7-SMAF-I162-j.zip">MA-7 author tool</a>. It's unclear which features are hardware and which are software. You can also try to decompile DLLs from <a href="./MCP-MA7-162-e.zip">MCP MA-7</a>.</p>
+			<table class="image-holder" style="width: 50%; page-break-after: always">
+				<tr>
+					<th>Contents:</th>
+				</tr>
+				<tr>
+					<td><a href="#Overview">Overview</a></td>
+				</tr>
+				<tr>
+					<td><a href="#FM channels">FM channels</a></td>
+				</tr>
+				<tr>
+					<td><a href="#PCM/ADPCM channels">PCM/ADPCM channels</a></td>
+				</tr>
+				<tr>
+					<td><a href="#Audio channels">Audio channels</a></td>
+				</tr>
+				<tr>
+					<td><a href="#Polyphony">Polyphony</a></td>
+				</tr>
+				<tr>
+					<td><a href="#DSP effects">DSP effects</a></td>
+				</tr>
+				<tr>
+					<td><a href="#Pictures of MA-7 development board">Pictures of MA-7 development board</a></td>
+				</tr>
+				<tr>
+					<td><a href="#Pictures of my MA-7 development board">Pictures of my MA-7 development board</a></td>
+				</tr>
+				<tr>
+					<td><a href="#Research log">Research log</a></td>
+				</tr>
+			</table>
+			
+			<br>
+			<h2 id="Overview">Overview</h2>
+			<p>Right now I don't have a way to directly interface real chip on the dev board, so everything you will see is info collected from <a href="./ATS-MA7-SMAF-I162-j.zip">MA-7 author tool</a>. It's unclear which features are hardware and which are software. You can also try to decompile DLLs from <a href="./MCP-MA7-162-e.zip">MCP MA-7</a>.</p>
+			<p>There also is a <a href="./MMFMA7ASEV161.iso">dump</a> of the disk (which comes with dev board) contents (thanks @heemin!).</p>
 
 			<p>The chip features multi-channel diverse audio synth capabilities, has internal DACs, op-amps and stereo sound output. Possibly features internal PLL.</p>
 			<p>Yamaha claims up to 128 voices polyphony, but these probably aren't channels in chiptune sense (see below).</p>
-			<p>I may receive the dev board, the pictures of which are at the bottom of this page, in several months. Then I will update the info and hopefully start the reverse engineering phase.</p>
+			<p>I received the board (thanks @heemin!), so soon I will hopefully start the reverse engineering phase.</p>
 			<br>
 
-			<h2>FM channels</h2>
+			<h2 id="FM channels">FM channels</h2>
 
 			<p>Chip has several FM channels. Each channel can be 4-op or 2-op (?) probably, like in OPL3, 2 2-op channels can be combined into 1 4-op channel. Each channel has 2 2-op and 6 4-op algorithms. Some algorithms feature feedback on two operators.</p>
 			<p>Each FM channel has 32-step panning.</p>
@@ -44,30 +79,30 @@
 			<p>Each operator can be put in fixed frequency mode where operator's frequency can be independently set.</p>
 			<br>
 
-			<h2>PCM/ADPCM channels</h2>
+			<h2 id="PCM/ADPCM channels">PCM/ADPCM channels</h2>
 
 			<p>Chip seems to support 4-bit ADPCM, as well as 8- and 16-bit PCM samples. You can specify "base" sampling frequency, as well as start and end of looped section (so it supports loop point). Volume envelope and filter block are identical with FM channel, as well as vibrato/tremolo/panning controls.</p>
 			<p>You can choose either MIDI bank sample (stored in chip ROM?? or loaded from phone memory), custom sample or noise for playback. Length of sample cannot exceed 16386 bytes. Seems that chip has around 16 KiB of RAM for samples.</p>
 			<p>PCM/ADPCM channel has pitch envelope. It is identical to filter envelope, but instead of cutoff control points are -127 to 127 and control relative pitch change (in semitones?). It doesn't have "key follow" flag.</p>
 			<br>
 
-			<h2>Audio channels</h2>
+			<h2 id="Audio channels">Audio channels</h2>
 			<p>This seems to be the streamed audio section. It's unknown how exactly audio is streamed but seems like it requires external CPU or whatever to provide properly timed and generated PCM stream. MA-7 author tool provides 16 "Audio" channels, two last of them are used to playback 2 different ADPCM samples simultaneously in MA-7 authoring tool demo project. If you try to place playbacks of these samples on more "Audio" channels, all except two of them go silent. So the max number of simultaneously playing channels is two, at least in MA-7 authoring tool.</p>
 			<br>
 
-			<h2>Vocaloid/speech synth channels???</h2>
-			<p>Chip has some speech synth capabilities. HV editor (HV probably stands for human voice) features unknown functionality point envelope (called "formant") and the array of 8 control blocks. Each block has the following settings: volume, frequency offset (signed, in cents), waveform (the same as in FM channel editor), 0-3 LFO speed, AM and vibrato toggles and 0-3 depth controls. There's also one "Prosodic Volume Enable" (sic!) checkbox in the editor.</p>
+			<h2>Vocaloid/speech synth channel</h2>
+			<p>Chip has some speech synth capabilities. HV editor (HV probably stands for human voice) features point envelope (called "formant", shows frequency offset and volume?) and the array of 8 control blocks. Each block has the following settings: volume, frequency offset (signed, in cents), waveform (the same as in FM channel editor), 0-3 LFO speed, AM and vibrato toggles and 0-3 depth controls. There's also one "Prosodic Volume Enable" (sic!) checkbox in the editor.</p>
 			<p>In the next editor you can specify what vocaloid says, using Japanese syllables and special symbols that control pitch, volume and "expression" (probably some filters?). The playback of speech synth script is probably handled in software since from recording register updates are at around 60 Hz rate.</p>
 			<br>
 
-			<h2>Polyphony</h2>
+			<h2 id="Polyphony">Polyphony</h2>
 			<p>Now it is unclear what's the speech synth implementation is. Waveform looks like it's CSM mode but for 8 operators. It is unclear if there are some dedicated hardware channels used for that or 4 2-op channels are put into some special mode to output CSM fundamental frequency + 8 of their own frequencies. There aren't any "noisy" syllables so probably no modulation is happening.</p>
 			<p>That's why it's unclear what Yamaha tried to say with "up to 128 voices". Since each FM operator has its own frequency control in fixed mode, PR/marketing team could just count FM operators, add in PCM/ADPCM channels and call it a 128 voices polyphony.</p>
 			<p>If chip really has 128 voices polyphony, then how? For example, it's known that MA-3 in 2-op mode has 32 FM channels. This leaves 96 channels. Let's assume that there are 32 more channels for PCM/ADPCM. You still have 64 channels for... whatever. So I think that it either has more FM channels, some of which are only for speech synth, or Yamaha lied.</p>
 			<p>MA-7 authoring tool says that for MA-7 only "Normal" mode is supported. In manual it's said that mode supports 32 FM + 32 PCM + 2 Audio (streamed) + 1 HV (speech synth) channels. This totals up to 67 channels. Still not 128...</p>
 			<br>
 
-			<h2>DSP effects</h2>
+			<h2 id="DSP effects">DSP effects</h2>
 			<p>Each channel can have 2 DSP effects. In MA-7 author tool they are called "SFX1" and "SFX2". SFX1 takes mono input and produces stereo output. SFX2 takes stereo input, emits stereo output. This output is summed with SFX1 output (left and right channel separately), as well as both outputs are added to SFX1 input.</p>
 			<p>MA-7 author tool allows to choose one of the presets for SFX1 and SFX2 and modify some of their parameters. Parameters count and limits differ from preset to preset, apart from maybe LP/HP filters cutoff in several SFX1 presets.</p>
 			<p>SFX1 presets: room reverb, plate(?), karaoke(?), delay. You can also select "no effect".</p>
@@ -75,7 +110,7 @@
 			<br>
 		</div>
 		<div class="contentma7">
-			<h2>Pictures of MA-7 development board</h2>
+			<h2 id="Pictures of MA-7 development board">Pictures of MA-7 development board</h2>
 			<p>Taken from <a href="https://www.manmullsang.com/shop/item.php?it_id=1639570256">this web page</a>.</p>
 			<div class="image-div" style="width: 95%; float: right">
 				<table class="image-holder">
@@ -99,6 +134,769 @@
 					</tr>
 				</table>
 			</div>
+			<br>
+			<h2 id="Pictures of my MA-7 development board">Pictures of my MA-7 development board</h2>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3360.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Box.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3361.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The only thing written on the box.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3362.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Inside the box lies the caution blah blah.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3363.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Under the caution lie the wires.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3364.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Shitty mobile phone speakers simulator.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3365.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Main simulator.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3366.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Simulator's underside.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3367.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Simulator's thickness.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3369.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Simulator's beefy audio jacks, one per channel.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3370.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>USB cable, nothing special.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3371.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The package and instruction for phone speaker simulator.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3372.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Firmware and docs disc.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3373.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Firmware and docs disc, naked.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3374.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The dev board itself.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3375.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The dev board itself, naked.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3376.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The dev board front panel.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3377.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The dev board right side.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3378.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The dev board back side.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3379.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The dev board left side.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3437.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The dev board belly.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3380.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Four screws that hold the upper lid.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3382.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Upper lid removed.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3383.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Board's PCB full shot, top side.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3384.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Board's PCB upper left corner. You can already see that one jack does not have a hole for it. Also the whole board has A LOT of test points and 0-resistance resistors...</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3385.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Board's PCB bottom left corner.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3386.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Board's PCB upper right corner.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3387.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The CPU on the dev board. It, along with RAM, ROM etc. simulates the mobile phone chip is connected to. And yes, only now I started using a flashlight to make reading chip markings easier.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3388.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Two RAM units, 16 MiB each. To the right from them is another 8-bit microcomputer, idk why. The chip with yellow-ish label is probably the ROM.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3389.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Another shot so that markings on small chips are easier to read.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3390.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>And another.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3391.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>And another.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3392.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>And another, this time closer to the top.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3393.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>And another, this time for the components on which markings are on their vertical surfaces.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3394.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Silkscreen labels of audio jacks.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3395.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>More silkscreen labels of audio jacks.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3396.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Silkscreen labels of USB ports.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3398.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>We need to know who manufactured the jacks.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3435.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>And power switch.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3436.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>And these two things.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3399.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>More silkscreen labels with stellar lighting.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3400.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Silkscreen labels of switches.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3400.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Silkscreen labels of switches.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3401.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>I would have never guessed what these are for, I am serious.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3402.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>A small elevated board which houses the actual MA-7 chip.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3403.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Almost forgot to take a pic of LEDs panel.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3406.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The TOSLINK port is held in place by this screw.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3407.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Six screws holding the PCB in the case, and screw with nut and ughhhh plastic cylinder which holds the TOSLINK port.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3408.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Empty case without the main PCB.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3409.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Overlit backside of LEDs panel.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3410.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>These two screws with nuts hold the small elevated board. To unscrew them you need to dismount the main PCB since nuts are on the bottom side of it. The small board is held in place fairly well by its connectors but Yamaha went overkill again.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3411.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>What's below the elevated PCB.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3412.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The elevated PCB shows its belly.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3413.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>For absolute idiots they wrote both commercial and internal names of the chip.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3414.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Chip is in some ceramic BGA package.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3415.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Tried to take a pic to later guess how many layers the PCB has...</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3416.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>And one more. This screwdriver handle will be featured in several future episodes too.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3417.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Two chips with identical H and W dimesions may have different number of pins in BGA package. Here I tried to peek.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3418.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Second attempt.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3419.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Final attempt, hand tired.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3420.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Underside of main PCB. Below just shots of its sections, no comments</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3426.JPG" width="100%"></object></th>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3427.JPG" width="100%"></object></th>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3428.JPG" width="100%"></object></th>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3429.JPG" width="100%"></object></th>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3430.JPG" width="100%"></object></th>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3431.JPG" width="100%"></object></th>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3432.JPG" width="100%"></object></th>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3433.JPG" width="100%"></object></th>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3434.JPG" width="100%"></object></th>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3438.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Power supply.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3439.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Alone.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; float: right">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./IMG_3440.JPG" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Plug dimesions can be guessed.</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<br>
+		<div class="contentma7">
+			<h2 id="Research log">Research log</h2>
+			<p>06.10.2024: I managed to launch the board and make it play demo project from MA-7 authoring tool. It took Windows XP virtual machine to properly install the drivers (I used pirated VMWare Workstation Pro) and setup the playback.</p>
 		</div>
 	</body>
 </html>
