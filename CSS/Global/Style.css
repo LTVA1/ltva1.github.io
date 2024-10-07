@@ -494,6 +494,7 @@ td {
 
 .image-div {  
 	margin: 0 0em 1em 2em;
+	max-width: 900px;
 }
 
 .image-holder {
