@@ -9,7 +9,7 @@
 	
 	<body>
 		<div class="contentma7">		
-			<h1>Yamaha MA-7 reverse engineering and info</h1>
+			<h1>Yamaha MA-7 research and info</h1>
 			<hr>
 			<p>On this page I will collect all the info I have about Yamaha MA-7 (Mobile Audio 7, YMU786). You can find some info about MA-x series chips <a href="https://gist.github.com/bryc/e85315f758ff3eced19d2d4fdeef01c5#ymu757--ymu757b-ma-1--ma-1c">here</a>.</p>
 			<br>
@@ -53,14 +53,14 @@
 
 			<p>The chip features multi-channel diverse audio synth capabilities, has internal DACs, op-amps and stereo sound output. Possibly features internal PLL.</p>
 			<p>Yamaha claims up to 128 voices polyphony, but these probably aren't channels in chiptune sense (see below).</p>
-			<p>I received the board (thanks @heemin!), so soon I will hopefully start the reverse engineering phase.</p>
+			<p>I received the board (thanks @heemin!), so soon I will hopefully succeed with the research and documenting phase.</p>
 			<br>
 
 			<h2 id="FM channels">FM channels</h2>
 
 			<p>Chip has several FM channels. Each channel can be 4-op or 2-op (?) probably, like in OPL3, 2 2-op channels can be combined into 1 4-op channel. Each channel has 2 2-op and 6 4-op algorithms. Some algorithms feature feedback on two operators.</p>
 			<p>Each FM channel has 32-step panning.</p>
-			<p>Each FM channel has weird LFO selector, 0-3. It actually controls tremolo speed (AM speed). Each FM operator has a toggle for vibrato and tremolo LFO, and 4-step control over tremolo and vibrato depth, although I could hear only tremolo, vibrato wasn't present. After some clicking vibrato somehow was enabled, but when I disabled it, it still stayed, so it's probably an emulation bug.</p>
+			<p>Each FM channel has weird LFO selector, 0-3. It actually controls tremolo speed (AM speed) and vibrato speed (tremolo and vibrato seem to share this LFO speed). Each FM operator has a toggle for vibrato and tremolo, and 4-step control over tremolo and vibrato depth, although I could clearly hear only tremolo, vibrato was very shallow even at maximum depth.</p>
 			<p>Each FM channel has lowpass resonant filter with envelope. Resonance is 0-31, envelope has 5 points, for each cutoff control is 0-8184. Envelope has sustain flag and ignore key-off flag. Envelope has a simple cutoff scaling, "key follow", which increases cutoff for higher notes. Envelope rates are 0-31, there are 4 such rates, labeled AR, DR, SR and RR. Also LFO is present, its effect is combined with envelope. LFO has two shapes, triangle and semi-random (labeled as S&H?). LFO has 0-7 frequency and depth controls.</p>
 			<p>Each operator can be turned on and off (opmask?). Each operator has 32 waveforms to choose from, they are the same as on YMF825:</p>
 			<div class="image-div" style="width: 400px; float: right">
@@ -75,7 +75,7 @@
 				</table>
 			</div>
 			<p>Three missing waveforms are global RAM-stored waveforms you can specify. MA-7 author tool supports 16-bit PCM wav files and clamps them at 1024 samples length, so that's the format waves use.</p>
-			<p>Each operator has ADSR envelope with sustain rate. AR, DR, SR and RR are 0-31, sustain level is 0-15. Total level is 0-63. There are flags to enable sustain, to ignore key-off for envelope, to enable vibrato and tremolo. Vibrato and tremolo depth controls are 0-3. Still, I can't hear any vibrato even with the max depth. Seems like am emulation bug?? Each operator has KSR toggle (envelope speed) and 4-step key scaling level strength control (volume scaling). Feedback is 0-7 for those operators that have it. Detune is 0-15.</p>
+			<p>Each operator has ADSR envelope with sustain rate. AR, DR, SR and RR are 0-31, sustain level is 0-15. Total level is 0-63. There are flags to enable sustain, to ignore key-off for envelope, to enable vibrato and tremolo. Vibrato and tremolo depth controls are 0-3. Each operator has KSR toggle (envelope speed) and 4-step key scaling level strength control (volume scaling). Feedback is 0-7 for those operators that have it. Detune is 0-15.</p>
 			<p>Each operator can be put in fixed frequency mode where operator's frequency can be independently set.</p>
 			<br>
 
@@ -140,7 +140,71 @@
 		</div>
 		<div class="contentma7">
 			<h2 id="Research log">Research log</h2>
-			<p>06.10.2024: I managed to launch the board and make it play demo project from MA-7 authoring tool. It took Windows XP virtual machine to properly install the drivers (I used pirated VMWare Workstation Pro) and setup the playback.</p>
+			<p><b>06.10.2024:</b> I managed to launch the board and make it play demo project from MA-7 authoring tool. It took Windows XP virtual machine to properly install the drivers and setup the playback.</p>
+			<hr>
+			<p><b>19.10.2024:</b> I tried to connect my logic analyzer (Kingst LA1010) to all three 2.54mm pitch connectors on the board.</p>
+			<p>First, I found what looks like a data bus. Here's how I connected the logic analyzer probe wires:</p>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./research/logic_connect_databus.jpg" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Ground is connected to the row that is further from the camera.</td>
+					</tr>
+				</table>
+			</div>
+			<p>Around 50-80 times a second, even when no music is played, some data packets are passing on the bus. I recorded several seconds of MA-7 authoring tool demo project playback. You can find the file <a href="./research/databus.kvdat">here</a>.</p>
+			<p>I could not decode the info on the bus because this looks nothing like SPI, UART, I2C, MIL-STD-1553, parallel bus or some other common communication interface. Red and green channels look somewhat like UART or Manchester/MIL-STD-1553 signals, but they also have a lot of sync signals (purple, blue, yellow channels) and some chip-select-like signal (orange, below the red channel).</p>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./research/signals_packet_start.png" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>This is how one of the packets starts.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./research/signals_packet_contents.png" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>And this is the beginning of the packet.</td>
+					</tr>
+				</table>
+			</div>
+			<p>Probably there are some differential signals there, and I sampled them wrong because I sampled the voltage compared to some pin that I supposed to be ground. Look at green and red channels, they are almost inverted copies of each other except the very left side where they have the same high logic level before the packet main segment starts.</p>
+			<p>Some other signals on this connector are RGB LED and vibration motor control signals, they are obvious (1 means ON, 0 means OFF) and are changing predictably so I didn't include them in the pictures and in the file.</p>
+			<br>
+			<p>Then I also connected to the second connector. Here I found nothing interesting except two clocks, one around 1.3MHz and other around 20kHz:</p>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./research/logic_connect_clocks.jpg" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Here's how logic analyzer was connected.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./research/signals_clocks.png" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>And here are the two clocks. I couldn't find any other signals on this connector.</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</body>
 </html>
