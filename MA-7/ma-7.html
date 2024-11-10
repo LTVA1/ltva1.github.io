@@ -47,6 +47,9 @@
 					<td><a href="#DSP effects">DSP effects</a></td>
 				</tr>
 				<tr>
+					<td><a href="#Internal RAM">Internal RAM</a></td>
+				</tr>
+				<tr>
 					<td><a href="#Pictures of MA-7 development board">Pictures of MA-7 development board</a></td>
 				</tr>
 				<tr>
@@ -69,7 +72,7 @@
 
 			<h2 id="FM channels">FM channels</h2>
 
-			<p>Chip has several FM channels. Each channel can be 4-op or 2-op (?) probably, like in OPL3, 2 2-op channels can be combined into 1 4-op channel. Each channel has 2 2-op and 6 4-op algorithms. Some algorithms feature feedback on two operators.</p>
+			<p>Chip has several FM channels. Each channel can be 4-op or 2-op (?) probably, like in OPL3, 2 2-op channels can be combined into 1 4-op channel. This totals to 32 2-op FM channels or 16 4-op FM channels. Each channel has 2 2-op and 6 4-op algorithms. Some algorithms feature feedback on two operators.</p>
 			<p>Each FM channel has 32-step panning.</p>
 			<p>Each FM channel has weird LFO selector, 0-3. It actually controls tremolo speed (AM speed) and vibrato speed (tremolo and vibrato seem to share this LFO speed). Each FM operator has a toggle for vibrato and tremolo, and 4-step control over tremolo and vibrato depth, although I could clearly hear only tremolo, vibrato was very shallow even at maximum depth.</p>
 			<p>Each FM channel has lowpass resonant filter with envelope. Resonance is 0-31, envelope has 5 points, for each cutoff control is 0-8184. Envelope has sustain flag and ignore key-off flag. Envelope has a simple cutoff scaling, "key follow", which increases cutoff for higher notes. Envelope rates are 0-31, there are 4 such rates, labeled AR, DR, SR and RR. Also LFO is present, its effect is combined with envelope. LFO has two shapes, triangle and semi-random (labeled as S&H?). LFO has 0-7 frequency and depth controls.</p>
@@ -92,9 +95,10 @@
 
 			<h2 id="PCM/ADPCM channels">PCM/ADPCM channels</h2>
 
-			<p>Chip seems to support 4-bit ADPCM, as well as 8- and 16-bit PCM samples. You can specify "base" sampling frequency, as well as start and end of looped section (so it supports loop point). Volume envelope and filter block are identical with FM channel, as well as vibrato/tremolo/panning controls.</p>
-			<p>You can choose either MIDI bank sample (stored in chip ROM?? or loaded from phone memory), custom sample or noise for playback. Length of sample cannot exceed 16386 bytes. Seems that chip has around 16 KiB of RAM for samples.</p>
+			<p>Chip seems to support 4-bit ADPCM, as well as 8- and 16-bit PCM samples. There are 32 PCM channels. Multiple PCM channels can share the same sample. You can specify "base" sampling frequency, as well as start and end of looped section (so it supports loop point). Volume envelope and filter block are identical with FM channel, as well as vibrato/tremolo/panning controls.</p>
+			<p>You can choose either MIDI bank sample (stored in chip ROM?? or loaded from phone memory), custom sample or noise for playback. Length of sample cannot exceed 16382 bytes.</p>
 			<p>PCM/ADPCM channel has pitch envelope. It is identical to filter envelope, but instead of cutoff control points are -127 to 127 and control relative pitch change (in semitones?). It doesn't have "key follow" flag.</p>
+			<p>Given the small size of internal RAM, most likely you would use these channels with wavetables. 32 256-byte wavetables total to 8 KiB of used RAM.</p>
 			<br>
 
 			<h2 id="Audio channels">Audio channels</h2>
@@ -109,7 +113,7 @@
 			<h2 id="Polyphony">Polyphony</h2>
 			<p>Now it is unclear what's the speech synth implementation is. Waveform looks like it's CSM mode but for 8 operators. It is unclear if there are some dedicated hardware channels used for that or 4 2-op channels are put into some special mode to output CSM fundamental frequency + 8 of their own frequencies. There aren't any "noisy" syllables so probably no modulation is happening.</p>
 			<p>That's why it's unclear what Yamaha tried to say with "up to 128 voices". Since each FM operator has its own frequency control in fixed mode, PR/marketing team could just count FM operators, add in PCM/ADPCM channels and call it a 128 voices polyphony.</p>
-			<p>If chip really has 128 voices polyphony, then how? For example, it's known that MA-3 in 2-op mode has 32 FM channels. This leaves 96 channels. Let's assume that there are 32 more channels for PCM/ADPCM. You still have 64 channels for... whatever. So I think that it either has more FM channels, some of which are only for speech synth, or Yamaha lied.</p>
+			<p>If chip really has 128 voices polyphony, then how? For example, it's known that MA-3 in 2-op mode has 32 FM channels. This leaves 96 channels. Let's assume that there are 32 more channels for PCM/ADPCM. You still have 64 channels for... whatever. So I think that it either has more FM channels, some of which are only for speech synth, or Yamaha was not correct there.</p>
 			<p>MA-7 authoring tool says that for MA-7 only "Normal" mode is supported. In manual it's said that mode supports 32 FM + 32 PCM + 2 Audio (streamed) + 1 HV (speech synth) channels. This totals up to 67 channels. Still not 128...</p>
 			<br>
 
@@ -118,6 +122,11 @@
 			<p>MA-7 author tool allows to choose one of the presets for SFX1 and SFX2 and modify some of their parameters. Parameters count and limits differ from preset to preset, apart from maybe LP/HP filters cutoff in several SFX1 presets.</p>
 			<p>SFX1 presets: room reverb, plate(?), karaoke(?), delay. You can also select "no effect".</p>
 			<p>SFX2 presets: chorus, celeste, flanger, tremolo, ringmod, auto-pan, phaser, distortion, overdrive, amplifier simulator, stereo 3-band equalizer, mono 2-band equalizer, 2-band equalizer, auto-wah, pitch change, compressor, voice cancel, ensemble detune, ambience. You can also select "no effect".</p>
+			<br>
+
+			<h2 id="Internal RAM">Internal RAM</h2>
+			<p>AT-MA7-SMAF (authoring tool) user manual says that there are 16382 bytes available in MA-7 RAM. The manual also gives the info about how many bytes does channel info occupy: 22 or 38 (?) bytes for 2-op FM channel, 42 or 58 (?) for 4-op FM channel, 14 or 30 (?) for PCM channel without "PEG" (without envelope generator data?), 40 or 40 (sic!) (?) for PCM channel with "PEG". Most probably the differences are in if filter envelope data is added, since for 2-op & 4-op FM and for PCM without "PEG" the size difference is constant (16 bytes). However, the PCM channel with "PEG" data breaks this logic (maybe a mistake/typo in manual?).</p>
+			<p>Sample occupies the number of bytes it weighs if size in bytes is even and (size + 1) bytes if size is odd (rounded upwards to nearest 2-byte boundary). Custom FM operator waveform weighs 2048 bytes which perfectly matches with the 1024-steps restriction given that each step uses 2 bytes.</p>
 			<br>
 		</div>
 		<div class="contentma7">
