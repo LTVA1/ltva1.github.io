@@ -125,7 +125,7 @@
 			<br>
 
 			<h2 id="Internal RAM">Internal RAM</h2>
-			<p>AT-MA7-SMAF (authoring tool) user manual says that there are 16382 bytes available in MA-7 RAM. The manual also gives the info about how many bytes does channel info occupy: 22 or 38 (?) bytes for 2-op FM channel, 42 or 58 (?) for 4-op FM channel, 14 or 30 (?) for PCM channel without "PEG" (without envelope generator data?), 40 or 40 (sic!) (?) for PCM channel with "PEG". Most probably the differences are in if filter envelope data is added, since for 2-op & 4-op FM and for PCM without "PEG" the size difference is constant (16 bytes). However, the PCM channel with "PEG" data breaks this logic (maybe a mistake/typo in manual?).</p>
+			<p>AT-MA7-SMAF (authoring tool) user manual says that there are 16382 bytes available in MA-7 RAM. The manual also gives the info about how many bytes does channel info occupy: 22 or 38 (?) bytes for 2-op FM channel, 42 or 58 (?) for 4-op FM channel, 14 or 30 (?) for PCM channel without "PEG" (without pitch envelope generator data?), 40 or 40 (sic!) (?) for PCM channel with "PEG". Most probably the differences are in if filter envelope data is added, since for 2-op & 4-op FM and for PCM without "PEG" the size difference is constant (16 bytes). However, the PCM channel with "PEG" data breaks this logic (maybe a mistake/typo in manual?).</p>
 			<p>Sample occupies the number of bytes it weighs if size in bytes is even and (size + 1) bytes if size is odd (rounded upwards to nearest 2-byte boundary). Custom FM operator waveform weighs 2048 bytes which perfectly matches with the 1024-steps restriction given that each step uses 2 bytes.</p>
 			<br>
 		</div>
