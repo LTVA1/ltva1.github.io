@@ -199,7 +199,6 @@
 					</tr>
 				</table>
 			</div>
-			<p>Probably there are some differential signals there, and I sampled them wrong because I sampled the voltage compared to some pin that I supposed to be ground. Look at green and red channels, they are almost inverted copies of each other except the very left side where they have the same high logic level before the packet main segment starts.</p>
 			<p>Some other signals on this connector are RGB LED and vibration motor control signals, they are obvious (1 means ON, 0 means OFF) and are changing predictably so I didn't include them in the pictures and in the file.</p>
 			<br>
 			<p>Then I also connected to the second connector. Here I found nothing interesting except two clocks, one around 1.3MHz and other around 20kHz:</p>
@@ -225,6 +224,82 @@
 					</tr>
 				</table>
 			</div>
+			<p><b>10.04.2025:</b> I prepared a custom <a href="./research/test_wave/test.m7p">MA-7 authoring tool project</a> with only one note. I used <a href="./research/test_wave/test.mid">this simple MIDI file</a> to make a note event so that chip would play something. Then I added 15th (custom) FM wave for the instrument by importing <a href="./research/test_wave/test_sawtooth.wav">this one-cycle sawtooth waveform</a>.</p>
+			<p>The idea was simple — by having one specific piece of data (the sawtooth wave) I can easily spot it on the bus... But I also needed to find the bus.</p>
+			<p>First, I found what looks like a data bus. Here's how I connected the logic analyzer probe wires:</p>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><a target="_blank" rel="noopener noreferrer" href="./research/test_wave/logic_connect_clocks.jpg"><img src="./research/test_wave/logic_connect_clocks_preview_databus_highlighted.jpg" width="100%"></object></a></th>
+					</tr>
+					
+					<tr>
+						<td>Here's how logic analyzer was connected. The eight wires in red circle are the data bus (presumably LSB to MSB left to right).</td>
+					</tr>
+				</table>
+			</div>
+			<p>Data lines seem to have some pullup resistors or such because they only get into the proper logic levels when the sync/read/write (?) strobe is happening. Also bus clock speed is rather low, around 300kHz.</p>
+			<p>There are different "packets" on the data bus:</p>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./research/signals_packet_databus_4_writes_clock.png" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>The green clock repeats each 4 read/write strobe signals.</td>
+					</tr>
+				</table>
+			</div>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./research/signals_packet_databus_big.png" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Here the green clock almost isn't present.</td>
+					</tr>
+				</table>
+			</div>
+			<p>I couldn't really figure out what happens so I just went straight to experimenting with my custom song. Here's the <a href="./research/test_wave/test_1_note_custom_sawtooth_FM_wave.kvdat">logic analyzer recording</a> of two seconds when the playback started</p>
+			<p>So, finally, I saw a recognisable pattern!</p>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./research/test_wave/logic_pattern.png" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Bit structure of increasing byte values is present.</td>
+					</tr>
+				</table>
+			</div>
+			<p>Two lower bus signals do not demonstrate the bit pattern. However, if we look closer...</p>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./research/test_wave/logic_pattern_closer_1st_part.png" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>It emerges.</td>
+					</tr>
+				</table>
+			</div>
+			<p>The structure of the 2nd part isn't that simple either:</p>
+			<div class="image-div" style="width: 95%; margin-left: 0">
+				<table class="image-holder">
+					<tr>
+						<th><img src="./research/test_wave/logic_pattern_closer_2nd_part.png" width="100%"></object></th>
+					</tr>
+					
+					<tr>
+						<td>Notice glitches when bus signals are changing and some line wants to stay at high level.</td>
+					</tr>
+				</table>
+			</div>
+			<p>I see the pattern but I can't quite pinpoint now what data format is there and what commands/signals are used to control the destination RAM address.</p>
 		</div>
 	</body>
 </html>
